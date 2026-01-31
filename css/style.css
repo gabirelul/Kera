@@ -300,23 +300,23 @@ input[type="submit"]:hover {
     z-index: 1000;
     padding: 0.8rem 0;
     background-color: transparent;
+    position: sticky;
+    top: 0;
     /* Transparent initially */
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    border-bottom: 1px solid transparent;
+    border-bottom: none;
     border-radius: 0;
     /* Rectangular */
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
 }
 
 .navbar-custom.is-stuck {
-    position: fixed;
-    top: 0;
     background-color: rgba(28, 28, 28, 0.3);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(254, 190, 16, 0.2);
-    /* Gold border */
+    border-bottom: none;
+    /* Removed gold border */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -443,14 +443,6 @@ input[type="submit"]:hover {
     opacity: 1;
 }
 
-    /* .nav-menu a.active {
-        color: var(--text-light);
-        background: rgba(255, 255, 255, 0.2);
-        /* Active Pill */
-        backdrop-filter: blur(10px);
-        opacity: 1;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    } */
 
 .nav-menu a i {
     font-size: 1.1rem !important;
@@ -1241,8 +1233,10 @@ body::before {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 1.5rem 0;
+    /* Reduced for tighter layout */
     position: sticky;
-    top: 0;
+    top: 60px;
+    /* Adjusted to align content flush with navbar (84px - 24px padding) */
     z-index: 100;
     border-bottom: 1px solid transparent;
     /* No border initially */
@@ -1254,8 +1248,8 @@ body::before {
     /* High transparency */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(254, 190, 16, 0.2);
-    /* Subtle Gold Border */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* Subtle white border instead of gold */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -1300,7 +1294,12 @@ body::before {
     display: flex;
     gap: 1rem;
     justify-content: center;
+    align-items: center;
+    /* Enforce vertical centering */
     flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    /* Reset defaults */
 }
 
 .filter-btn {
@@ -1472,10 +1471,24 @@ body::before {
     margin: 0;
 }
 
+@media (max-width: 1200px) {
+    .sticky-home-btn {
+        /* Prevents overlap with filter buttons on tablet */
+        display: none !important;
+    }
+}
+
 @media (max-width: 992px) {
     .container-fluid {
         padding-left: 4%;
         padding-right: 4%;
+    }
+
+    /* Tablet optimizations for filter buttons */
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        gap: 0.5rem;
     }
 
     .nav-menu {
@@ -1586,16 +1599,25 @@ body::before {
     }
 
     .gallery-card {
-        height: 380px;
+        height: auto;
+        /* Let content determine height */
+        padding: 1rem;
+        /* Reduced padding for mobile */
+    }
+
+    .gallery-image-container {
+        aspect-ratio: 4/3;
+        /* Better mobile aspect ratio */
+    }
+
+    .gallery-content {
+        padding: 0 0.25rem 1rem;
+        /* Reduced padding */
     }
 
     .gallery-grid {
         grid-template-columns: 1fr;
         gap: 1.25rem;
-    }
-
-    .gallery-item .gallery-card {
-        height: 450px;
     }
 
     .filter-tabs {
@@ -1605,6 +1627,29 @@ body::before {
     .filter-btn {
         padding: 0.75rem 1.5rem;
         font-size: 0.9rem;
+    }
+
+    /* Navbar sticky on mobile to prevent overlap */
+    .navbar-custom {
+        position: sticky;
+        /* Sticky on mobile */
+        top: 0;
+        padding: 1rem 0;
+        background-color: rgba(28, 28, 28, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: none;
+        z-index: 1000;
+    }
+
+    /* Fix filter section sticky positioning to account for navbar */
+    .filter-section {
+        position: sticky;
+        top: 92px;
+        /* Offset to sit exacty below sticky navbar (60px + 32px padding) */
+        padding: 1rem 0;
+        z-index: 99;
+        margin-top: 0 !important;
     }
 
     .gallery-header {
@@ -1634,7 +1679,8 @@ body::before {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
-    margin-left: 1rem;
+    margin-left: auto;
+    /* Push to the right */
     z-index: 1001;
     position: relative;
     transition: var(--transition-base);
@@ -1642,57 +1688,117 @@ body::before {
 
 .mobile-menu-toggle:hover {
     color: var(--primary-medium);
+    transform: translateY(-50%);
+    /* Enforce static position on hover */
 }
 
 @media (max-width: 768px) {
     .mobile-menu-toggle {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 30px;
+        /* Center of the 60px header row */
+        transform: translateY(-50%);
+        right: 1rem;
+        height: 44px;
+        width: 44px;
+        z-index: 1002;
+    }
+
+    .logo-link.mobile-logo {
+        display: flex;
+        align-items: center;
+        height: 60px;
+        /* Full header row height */
+        line-height: normal;
+        /* flexible */
+    }
+
+    .logo-link.desktop-logo {
+        display: none;
+        /* Hide desktop logo that's inside menu */
     }
 
     .nav-wrapper {
-        flex-direction: row;
-        width: 100%;
-        justify-content: space-between;
-        align-items: center;
+        display: flex;
+        align-items: flex-start;
+        /* Align top so expansion doesn't center-align items */
+        align-content: flex-start;
+        flex-wrap: wrap;
+        min-height: 60px;
+        height: auto;
+        /* Allow growth */
+        position: relative;
     }
 
     .nav-menu {
-        position: fixed;
-        top: 0;
-        right: 0;
+        position: static;
         width: 100%;
-        height: 100vh;
-        background-color: var(--primary-darker);
-        /* Arctic Depths palette */
+        /* Break to new line */
+        height: auto;
+        max-height: 0;
+        /* Animate this */
+        background: transparent;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        padding: 2rem;
-        gap: 2rem;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        z-index: 1000;
+        padding: 0;
+        gap: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
+        opacity: 0;
+        margin-top: 0;
     }
 
     .nav-menu.active {
-        transform: translateX(0);
-        box-shadow: none;
-        /* No shadow as requested */
+        max-height: 500px;
+        /* Arbitrary large height */
+        padding: 0 0 1.5rem 0;
+        /* Padding at bottom only */
+        border-top: none;
+        opacity: 1;
+        background-color: transparent;
+        /* Parent bg shows through */
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        margin-top: 0;
+    }
+
+    /* Navbar expands when menu is active */
+    .navbar-custom.menu-open {
+        background-color: rgba(28, 28, 28, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-menu li:first-child {
+        display: none;
+        /* Hide KERA logo inside menu since navbar logo remains visible */
     }
 
     .nav-menu a {
-        font-size: 1.5rem;
-        font-weight: 600;
+        font-size: 1.1rem;
+        font-weight: 500;
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        width: 100%;
+        padding: 1.2rem 0;
+        /* Increased spacing for aerated look */
+        transform: none;
+        transition: opacity 0.3s ease;
     }
 
     .nav-menu.active a {
         opacity: 1;
-        transform: translateY(0);
-        transition-delay: 0.2s;
-        /* Stagger effect could be added if needed */
+        transform: none;
+        transition-delay: 0.1s;
+    }
+
+    /* Hide sticky home button on mobile */
+    .sticky-home-btn {
+        display: none !important;
     }
 }
 
@@ -1780,8 +1886,15 @@ body::before {
     }
 
     .filter-btn {
-        padding: 0.625rem 1.25rem;
-        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        gap: 0.5rem;
+        /* Reduce icon spacing */
+    }
+
+    .filter-btn i {
+        font-size: 0.9rem;
+        /* Smaller icons */
     }
 }
 
@@ -2446,5 +2559,50 @@ button:focus {
         justify-content: center;
         order: 10;
         /* Ensure it's last */
+    }
+}
+
+
+/* Utility to hide categories on mobile menu open */
+@media (max-width: 768px) {
+    .filter-section.hidden-mobile {
+        display: none !important;
+    }
+}
+
+/* Desktop Navigation Vertical Adjustment */
+@media (min-width: 993px) {
+    .navbar-custom .container-fluid {
+        padding-left: 5%;
+        padding-right: 5%;
+        /* Indent logo and links from edges */
+    }
+
+    .filter-section {
+        top: 66px;
+        /* Adjusted to 66px (40+12.8+12.8) to prevent overlap/cutoff with navbar */
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        /* Increased to 2rem to provide breathing room (gap) between navbar and buttons */
+    }
+}
+
+/* Tablet Padding & Sizing Override (User requested single row & alignment) */
+@media (min-width: 769px) and (max-width: 992px) {
+    .filter-section {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .filter-tabs {
+        gap: 0.5rem;
+        /* Reduce gap to help fit in single row */
+    }
+
+    .filter-btn {
+        padding: 0.4rem 0.8rem;
+        /* Smaller padding */
+        font-size: 0.8rem;
+        /* Smaller font */
     }
 }

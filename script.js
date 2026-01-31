@@ -15,7 +15,7 @@ const SiteConfig = {
             folder: 'realestate',
             iconClass: 'hgi-stroke hgi-building-01',
             projects: [
-                { id: '001', title: 'Modern Villa', thumb: '001', photoCount: 1, videoCount: 1 }
+                { id: '001', title: 'Modern Villa', thumb: '001', photoCount: 1, videoCount: 0 }
             ]
         },
         {
@@ -24,7 +24,7 @@ const SiteConfig = {
             folder: 'restaurants',
             iconClass: 'hgi-stroke hgi-restaurant-table',
             projects: [
-                { id: '001', title: 'Culinary Art', thumb: '001', photoCount: 1, videoCount: 1 }
+                { id: '001', title: 'Culinary Art', thumb: '001', photoCount: 1, videoCount: 0 }
             ]
         },
         {
@@ -33,7 +33,7 @@ const SiteConfig = {
             folder: 'fashion',
             iconClass: 'hgi-stroke hgi-shirt-01',
             projects: [
-                { id: '001', title: 'Urban Style', thumb: '001', photoCount: 1, videoCount: 1 }
+                { id: '001', title: 'Urban Style', thumb: '001', photoCount: 1, videoCount: 0 }
             ]
         },
         {
@@ -42,7 +42,9 @@ const SiteConfig = {
             folder: 'cars',
             iconClass: 'hgi-stroke hgi-car-01',
             projects: [
-                { id: '001', title: 'Alpine Drift', thumb: '001', photoCount: 3, videoCount: 1 }
+                { id: '001', title: 'Urban Flow', thumb: '001', photoCount: 1, videoCount: 0 },
+                { id: '002', title: 'Neon Nights', thumb: '002', photoCount: 1, videoCount: 0 },
+                { id: '003', title: 'Porsche 911', thumb: '003', photoCount: 1, videoCount: 0 }
             ]
         },
         {
@@ -51,7 +53,7 @@ const SiteConfig = {
             folder: 'ads',
             iconClass: 'hgi-stroke hgi-checkmark-badge-01',
             projects: [
-                { id: '001', title: 'Brand Campaign', thumb: '001', photoCount: 1, videoCount: 1 }
+                // No content yet - future ads will go here
             ]
         }
     ],
@@ -117,8 +119,8 @@ function renderGalleryGrid() {
 
     SiteConfig.categories.forEach(cat => {
         cat.projects.forEach(proj => {
-            // Path: gallery/projects/[category]/project-[id]/photos/[category]-[project]-[thumb].jpg
-            const thumbSrc = `gallery/projects/${cat.folder}/project-${proj.id}/photos/${cat.folder}-${proj.id}-${proj.thumb}.jpg`;
+            // Simplified path: gallery/photos/[category]/[category]-[thumb].jpg
+            const thumbSrc = `gallery/photos/${cat.folder}/${cat.folder}-${proj.thumb}.jpg`;
             const projectLink = `project.html?category=${cat.id}&project=${proj.id}`;
 
             html += `
@@ -179,7 +181,7 @@ function initProjectPage() {
     // Render Photos
     for (let i = 1; i <= project.photoCount; i++) {
         const num = String(i).padStart(3, '0');
-        const src = `gallery/projects/${category.folder}/project-${project.id}/photos/${category.folder}-${project.id}-${num}.jpg`;
+        const src = `gallery/photos/${category.folder}/${category.folder}-${num}.jpg`;
 
         html += `
         <div class="col-md-6 mb-4">
@@ -195,8 +197,8 @@ function initProjectPage() {
     // Render Videos
     for (let i = 1; i <= project.videoCount; i++) {
         const num = String(i).padStart(3, '0');
-        // Assuming video path structure
-        const src = `gallery/projects/${category.folder}/project-${project.id}/videos/${category.folder}-${project.id}-${num}.mp4`;
+        // Simplified video path (no videos in current structure)
+        const src = `gallery/videos/${category.folder}/${category.folder}-${num}.mp4`;
 
         html += `
         <div class="col-12 mb-4">
@@ -405,20 +407,17 @@ function initSmoothScroll() {
  * Mobile Menu Toggle
  * Responsive navigation for smaller screens
  */
-/**
- * Mobile Menu Toggle
- * Responsive navigation for smaller screens
- */
 function initMobileMenu() {
     // Create hamburger menu for mobile if nav exists
     const nav = document.querySelector('.navbar-custom');
 
     if (nav) {
         const navMenu = document.querySelector('.nav-menu');
+        let menuToggle = document.querySelector('.mobile-menu-toggle');
 
-        // Add mobile menu toggle button if it doesn't exist
-        if (!document.querySelector('.mobile-menu-toggle')) {
-            const menuToggle = document.createElement('button');
+        // If toggle button doesn't exist, create it dynamically
+        if (!menuToggle) {
+            menuToggle = document.createElement('button');
             menuToggle.classList.add('mobile-menu-toggle');
             menuToggle.innerHTML = '☰';
             menuToggle.setAttribute('aria-label', 'Toggle Menu');
@@ -428,15 +427,41 @@ function initMobileMenu() {
                 // Insert after logo
                 brandLogo.parentNode.insertBefore(menuToggle, brandLogo.nextSibling);
             }
+        }
 
+        // Attach event listeners (works for both existing and new toggles)
+        if (menuToggle && navMenu) {
             // Toggle menu on click
             menuToggle.addEventListener('click', function () {
                 navMenu.classList.toggle('active');
                 this.classList.toggle('active');
-                document.body.classList.toggle('no-scroll'); // Prevent background scrolling
 
-                // Change icon
-                this.innerHTML = this.classList.contains('active') ? '✕' : '☰';
+                // Toggle navbar class for background expansion
+                if (nav) {
+                    nav.classList.toggle('menu-open');
+                }
+
+                // Toggle visibility of categories section (as requested)
+                const filterSection = document.querySelector('.filter-section');
+                if (filterSection) {
+                    if (navMenu.classList.contains('active')) {
+                        filterSection.classList.add('hidden-mobile');
+                    } else {
+                        filterSection.classList.remove('hidden-mobile');
+                    }
+                }
+
+                // Change icon based on state (support for both icon structure and text fallback)
+                const icon = this.querySelector('i');
+                if (icon) {
+                    // If using icon element, toggle icon classes
+                    this.classList.contains('active')
+                        ? icon.className = 'hgi-stroke hgi-cancel-01'
+                        : icon.className = 'hgi-stroke hgi-menu-01';
+                } else {
+                    // Fallback to text icons
+                    this.innerHTML = this.classList.contains('active') ? '✕' : '☰';
+                }
             });
 
             // Close menu when clicking menu items
@@ -445,9 +470,37 @@ function initMobileMenu() {
                 link.addEventListener('click', function () {
                     navMenu.classList.remove('active');
                     menuToggle.classList.remove('active');
-                    menuToggle.innerHTML = '☰';
-                    document.body.classList.remove('no-scroll');
+
+                    if (nav) nav.classList.remove('menu-open');
+
+                    // Reset categories visibility
+                    const filterSection = document.querySelector('.filter-section');
+                    if (filterSection) filterSection.classList.remove('hidden-mobile');
+
+                    const icon = menuToggle.querySelector('i');
+                    if (icon) {
+                        icon.className = 'hgi-stroke hgi-menu-01';
+                    } else {
+                        menuToggle.innerHTML = '☰';
+                    }
                 });
+            });
+
+            // Handle Resize - Reset if switching to desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    if (nav) nav.classList.remove('menu-open');
+
+                    // Reset categories visibility
+                    const filterSection = document.querySelector('.filter-section');
+                    if (filterSection) filterSection.classList.remove('hidden-mobile');
+
+                    const icon = menuToggle.querySelector('i');
+                    if (icon) icon.className = 'hgi-stroke hgi-menu-01';
+                    else menuToggle.innerHTML = '☰';
+                }
             });
         }
     }
@@ -887,10 +940,38 @@ function closeReelModal() {
 
 
 // Initialize Reels and Lightbox on load
+// Initialize Reels and Lightbox on load
 document.addEventListener('DOMContentLoaded', function () {
     createLightbox(); // Inject modal
     renderReels('featured-reels', false, 'grid');   // Index: Grid as requested
+
+    // Initialize sticky offset adjustment
+    adjustStickyHeaderOffset();
 });
+
+/**
+ * ADJUST STICKY HEADER OFFSET
+ * Dynamically sets the top offset of the filter section to match navbar height
+ * Prevents gaps or overlaps on desktop
+ */
+function adjustStickyHeaderOffset() {
+    const navbar = document.querySelector('.navbar-custom');
+    const filterSection = document.querySelector('.filter-section');
+
+    if (!navbar || !filterSection) return;
+
+    if (window.innerWidth >= 993) {
+        // Desktop: exact match
+        const navHeight = navbar.getBoundingClientRect().height;
+        filterSection.style.top = `${navHeight}px`;
+    } else {
+        // Mobile/Tablet: clear inline style to let CSS handle it
+        filterSection.style.top = '';
+    }
+}
+
+// Update on resize
+window.addEventListener('resize', debounce(adjustStickyHeaderOffset, 100));
 
 /**
  * DYNAMIC RENDERING FUNCTIONS
