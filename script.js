@@ -9,25 +9,66 @@
  */
 const SiteConfig = {
     categories: [
-        { id: 'real-estate', name: 'Real Estate', iconClass: 'hgi-stroke hgi-building-01' },
-        { id: 'restaurants', name: 'Restaurants', iconClass: 'hgi-stroke hgi-restaurant-table' },
-        { id: 'fashion', name: 'Fashion', iconClass: 'hgi-stroke hgi-shirt-01' },
-        { id: 'cars', name: 'Cars', iconClass: 'hgi-stroke hgi-car-01' },
-        { id: 'ads', name: 'Ads', iconClass: 'hgi-stroke hgi-checkmark-badge-01' }
+        {
+            id: 'real-estate',
+            name: 'Real Estate',
+            folder: 'realestate',
+            iconClass: 'hgi-stroke hgi-building-01',
+            projects: [
+                { id: '001', title: 'Modern Villa', thumb: '001', photoCount: 1, videoCount: 1 }
+            ]
+        },
+        {
+            id: 'restaurants',
+            name: 'Restaurants',
+            folder: 'restaurants',
+            iconClass: 'hgi-stroke hgi-restaurant-table',
+            projects: [
+                { id: '001', title: 'Culinary Art', thumb: '001', photoCount: 1, videoCount: 1 }
+            ]
+        },
+        {
+            id: 'fashion',
+            name: 'Fashion',
+            folder: 'fashion',
+            iconClass: 'hgi-stroke hgi-shirt-01',
+            projects: [
+                { id: '001', title: 'Urban Style', thumb: '001', photoCount: 1, videoCount: 1 }
+            ]
+        },
+        {
+            id: 'cars',
+            name: 'Cars',
+            folder: 'cars',
+            iconClass: 'hgi-stroke hgi-car-01',
+            projects: [
+                { id: '001', title: 'Alpine Drift', thumb: '001', photoCount: 3, videoCount: 1 }
+            ]
+        },
+        {
+            id: 'ads',
+            name: 'Ads',
+            folder: 'ads',
+            iconClass: 'hgi-stroke hgi-checkmark-badge-01',
+            projects: [
+                { id: '001', title: 'Brand Campaign', thumb: '001', photoCount: 1, videoCount: 1 }
+            ]
+        }
     ],
+    // ... ads config remains same ...
     ads: {
         heroAd: {
             enabled: false,
             title: 'Ads',
             description: '',
-            iconClass: 'hgi-stroke hgi-checkmark-badge-01', // Specific icon for ad
+            iconClass: 'hgi-stroke hgi-checkmark-badge-01',
             link: 'contact.html#special-offer'
         },
         galleryAd: {
             enabled: false,
             title: 'Sponsored Content',
             description: 'Partner with us',
-            imageSrc: 'gallery/ad-placeholder.jpg', // Would need a real image
+            imageSrc: 'gallery/ad-placeholder.jpg',
             link: 'contact.html'
         }
     }
@@ -36,33 +77,141 @@ const SiteConfig = {
 // ===== GALLERY FILTERING SYSTEM =====
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Render Dynamic Content
-    renderHeroServices();
-    renderGalleryFilters();
-    injectGalleryAds();
+    // Helper: Detect if we are on project.html
+    const isProjectPage = document.getElementById('projectMediaGrid') !== null;
 
-    // Initialize gallery filtering if on gallery page
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    const galleryGrid = document.getElementById('galleryGrid');
+    if (isProjectPage) {
+        initProjectPage();
+    } else {
+        // Main Gallery Page logic
+        renderHeroServices();
+        renderGalleryGrid();
+        renderGalleryFilters();
+        injectGalleryAds();
 
-    if (filterButtons.length > 0 && galleryItems.length > 0) {
-        initGalleryFiltering();
+        // Initialize gallery filtering if on gallery page
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        if (filterButtons.length > 0 && galleryItems.length > 0) {
+            initGalleryFiltering();
+        }
     }
 
-    // Initialize lazy loading with Intersection Observer
+    // Common Initializations
     initLazyLoading();
-
-    // Initialize smooth scroll for anchor links
     initSmoothScroll();
-
-    // Initialize mobile menu if needed
-    // Initialize mobile menu if needed
     initMobileMenu();
-
-    // Initialize sticky header observer
     initStickyObserver();
+    initNavbarScroll();
 });
+
+/**
+ * Render the Main Gallery Grid (One card per Project)
+ */
+function renderGalleryGrid() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    if (!galleryGrid) return;
+
+    let html = '';
+
+    SiteConfig.categories.forEach(cat => {
+        cat.projects.forEach(proj => {
+            // Path: gallery/projects/[category]/project-[id]/photos/[category]-[project]-[thumb].jpg
+            const thumbSrc = `gallery/projects/${cat.folder}/project-${proj.id}/photos/${cat.folder}-${proj.id}-${proj.thumb}.jpg`;
+            const projectLink = `project.html?category=${cat.id}&project=${proj.id}`;
+
+            html += `
+            <div class="col-lg-4 col-md-6 gallery-item" data-category="${cat.id}">
+                <a href="${projectLink}" class="text-decoration-none">
+                    <div class="gallery-card">
+                        <div class="gallery-image-container">
+                            <img src="${thumbSrc}" alt="${proj.title}" class="gallery-image hidden-opacity" loading="lazy">
+                        </div>
+                        <div class="gallery-content">
+                            <div class="gallery-header-row">
+                                <div class="gallery-text">
+                                    <h3 class="gallery-item-title">${proj.title}</h3>
+                                    <p class="text-white-50 small mb-0">${cat.name}</p>
+                                </div>
+                                <div class="gallery-arrow-btn">
+                                    <i class="hgi-stroke hgi-arrow-right-01"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            `;
+        });
+    });
+
+    galleryGrid.innerHTML = html;
+}
+
+/**
+ * Initialize Project Details Page
+ */
+function initProjectPage() {
+    const params = new URLSearchParams(window.location.search);
+    const catId = params.get('category');
+    const projId = params.get('project');
+
+    const mediaGrid = document.getElementById('projectMediaGrid');
+    const titleEl = document.getElementById('projectTitle');
+    const catEl = document.getElementById('projectCategory');
+
+    if (!catId || !projId) return;
+
+    // Find Project Data
+    const category = SiteConfig.categories.find(c => c.id === catId);
+    if (!category) return;
+
+    const project = category.projects.find(p => p.id === projId);
+    if (!project) return;
+
+    // Set Header Info
+    titleEl.textContent = project.title;
+    catEl.textContent = category.name;
+
+    let html = '';
+
+    // Render Photos
+    for (let i = 1; i <= project.photoCount; i++) {
+        const num = String(i).padStart(3, '0');
+        const src = `gallery/projects/${category.folder}/project-${project.id}/photos/${category.folder}-${project.id}-${num}.jpg`;
+
+        html += `
+        <div class="col-md-6 mb-4">
+            <div class="gallery-card">
+                <div class="gallery-image-container">
+                    <img src="${src}" alt="Photo ${i}" class="gallery-image" loading="lazy">
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    // Render Videos
+    for (let i = 1; i <= project.videoCount; i++) {
+        const num = String(i).padStart(3, '0');
+        // Assuming video path structure
+        const src = `gallery/projects/${category.folder}/project-${project.id}/videos/${category.folder}-${project.id}-${num}.mp4`;
+
+        html += `
+        <div class="col-12 mb-4">
+            <div class="gallery-card">
+                <video controls class="w-100 rounded" loading="lazy">
+                    <source src="${src}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        `;
+    }
+
+    mediaGrid.innerHTML = html;
+}
 
 // ... existing functions ...
 
@@ -85,6 +234,24 @@ function initStickyObserver() {
     });
 
     observer.observe(sentinel);
+}
+
+/**
+ * Navbar Scroll Effect
+ * Toggles .is-stuck class on scroll
+ */
+function initNavbarScroll() {
+    const navbar = document.querySelector('.navbar-custom');
+    if (!navbar) return;
+
+    window.addEventListener('scroll', () => {
+        // Threshold matches CSS top: 3.5rem (approx 56px)
+        if (window.scrollY > 56) {
+            navbar.classList.add('is-stuck');
+        } else {
+            navbar.classList.remove('is-stuck');
+        }
+    });
 }
 
 
@@ -306,40 +473,8 @@ function preloadHeroImage() {
 // Preload hero image on page load
 window.addEventListener('load', preloadHeroImage);
 
-/**
- * Scroll to Top Functionality
- * Adds a "back to top" button when scrolling down
- */
-function initScrollToTop() {
-    // Create scroll to top button
-    const scrollButton = document.createElement('button');
-    scrollButton.classList.add('scroll-to-top');
-    scrollButton.innerHTML = '↑';
-    scrollButton.setAttribute('aria-label', 'Scroll to Top');
-    document.body.appendChild(scrollButton);
-
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', function () {
-        if (window.pageYOffset > 300) {
-            scrollButton.classList.add('visible');
-        } else {
-            scrollButton.classList.remove('visible');
-        }
-    });
-
-    // Scroll to top on click
-    scrollButton.addEventListener('click', function () {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-}
-
-// Initialize scroll to top on gallery page
-if (window.location.pathname.includes('gallery')) {
-    initScrollToTop();
-}
+// Duplicate function removed to fix overlapping arrows
+// Using the HTML defined #scrollToTop button instead
 
 /**
  * Gallery Item Click Handler
@@ -421,6 +556,7 @@ console.log('%c Built with HTML, CSS, JavaScript & Bootstrap 5 ', 'background: #
 const reelsData = [
     {
         id: 'reel-ale',
+        title: 'Brand Vision',
         thumbnailSrc: 'gallery/reel-thumb-1.jpg',
         videoLink: 'video/ale-1.mp4',
         viewCount: '1.2M',
@@ -430,6 +566,7 @@ const reelsData = [
     },
     {
         id: 'reel-auto',
+        title: 'Auto Drive',
         thumbnailSrc: 'gallery/reel-thumb-2.jpg',
         videoLink: 'video/autocarservice-1.mp4',
         viewCount: '850K',
@@ -439,6 +576,7 @@ const reelsData = [
     },
     {
         id: 'reel-cm',
+        title: 'City Motion',
         thumbnailSrc: 'gallery/reel-thumb-3.jpg',
         videoLink: 'video/cm-1.mp4',
         viewCount: '2.1M',
@@ -448,6 +586,7 @@ const reelsData = [
     },
     {
         id: 'reel-ne',
+        title: 'Launch Day',
         thumbnailSrc: 'gallery/reel-thumb-4.jpg',
         videoLink: 'video/ne-1.mp4',
         viewCount: '500K',
@@ -457,6 +596,7 @@ const reelsData = [
     },
     {
         id: 'reel-tur1',
+        title: 'Episode 01',
         thumbnailSrc: 'gallery/reel-thumb-5.jpg',
         videoLink: 'video/tur-1.mp4',
         viewCount: '1.8M',
@@ -466,6 +606,7 @@ const reelsData = [
     },
     {
         id: 'reel-tur2',
+        title: 'Backstage',
         thumbnailSrc: 'gallery/reel-thumb-6.jpg',
         videoLink: 'video/tur-2.mp4',
         viewCount: '920K',
@@ -475,6 +616,7 @@ const reelsData = [
     },
     {
         id: 'reel-tur3',
+        title: 'Summer Vibes',
         thumbnailSrc: 'gallery/reel-thumb-6.jpg',
         videoLink: 'video/tur-3.mp4',
         viewCount: '750K',
@@ -492,30 +634,45 @@ const reelsData = [
 function createReelCard(reel) {
     return `
         <div class="reel-card" onclick="openReelModal('${reel.videoLink}')">
-            <video 
-                src="${reel.videoLink}#t=0.001" 
-                class="reel-thumbnail" 
-                muted 
-                loop 
-                playsinline
-                preload="metadata"
-                onmouseover="this.play()"
-                onmouseout="this.pause();this.currentTime=0;"
-            ></video>
-            
-            <div class="reel-overlay">
-                <div class="play-button">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 5V19L19 12L8 5Z" fill="white"/>
-                    </svg>
-                </div>
+            <div class="reel-media-container">
+                <video 
+                    src="${reel.videoLink}#t=0.001" 
+                    class="reel-thumbnail" 
+                    muted 
+                    loop 
+                    playsinline
+                    preload="metadata"
+                    onmouseover="this.play()"
+                    onmouseout="this.pause();this.currentTime=0;"
+                ></video>
                 
-                <div class="view-count">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span>${reel.viewCount}</span>
+                <div class="reel-overlay">
+                    <div class="play-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 5V19L19 12L8 5Z" fill="white"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="view-count">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <span>${reel.viewCount}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Style Footer -->
+            <div class="gallery-content">
+                <div class="gallery-header-row">
+                    <div class="gallery-text">
+                        <h3 class="gallery-item-title">${reel.title}</h3>
+                        <p class="text-white-50 small mb-0">Reel</p>
+                    </div>
+                    <div class="gallery-arrow-btn">
+                        <i class="hgi-stroke hgi-arrow-right-01"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -526,8 +683,9 @@ function createReelCard(reel) {
  * Render Reels to Container
  * @param {string} containerId - ID of the container element
  * @param {boolean} onlyFeatured - Whether to show only featured reels
+ * @param {string} layout - 'grid' (default) or 'row'
  */
-function renderReels(containerId, onlyFeatured = false) {
+function renderReels(containerId, onlyFeatured = false, layout = 'grid') {
     const container = document.getElementById(containerId);
 
     if (!container) return; // Exit if container doesn't exist on this page
@@ -536,7 +694,26 @@ function renderReels(containerId, onlyFeatured = false) {
         ? reelsData.filter(reel => reel.isFeatured)
         : reelsData;
 
-    container.innerHTML = filteredReels.map(createReelCard).join('');
+    // Apply layout class
+    if (layout === 'row') {
+        container.classList.add('row-layout');
+    }
+
+    // Performance: Use Intersection Observer for lazy rendering on index page
+    if (containerId === 'featured-reels') {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    container.innerHTML = filteredReels.map(createReelCard).join('');
+                    observer.unobserve(container);
+                }
+            });
+        }, { rootMargin: '200px' });
+
+        observer.observe(container);
+    } else {
+        container.innerHTML = filteredReels.map(createReelCard).join('');
+    }
 }
 
 /**
@@ -712,8 +889,7 @@ function closeReelModal() {
 // Initialize Reels and Lightbox on load
 document.addEventListener('DOMContentLoaded', function () {
     createLightbox(); // Inject modal
-    renderReels('featured-reels', false);   // For Index Page (Show All)
-    renderReels('all-reels', false);       // For Gallery/Projects Page
+    renderReels('featured-reels', false, 'grid');   // Index: Grid as requested
 });
 
 /**
@@ -907,3 +1083,26 @@ function resetPagination() {
 if (document.querySelector('.gallery-grid')) {
     initGalleryPagination();
 }
+
+// ===== BRAND CAROUSEL NAVIGATION =====
+document.addEventListener('DOMContentLoaded', function () {
+    const brandsCarousel = document.getElementById('brandsCarousel');
+    const prevBtn = document.querySelector('.brand-nav-btn.prev-btn');
+    const nextBtn = document.querySelector('.brand-nav-btn.next-btn');
+
+    if (brandsCarousel && prevBtn && nextBtn) {
+        prevBtn.addEventListener('click', () => {
+            brandsCarousel.scrollBy({
+                left: -300,
+                behavior: 'smooth'
+            });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            brandsCarousel.scrollBy({
+                left: 300,
+                behavior: 'smooth'
+            });
+        });
+    }
+});

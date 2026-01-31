@@ -1,0 +1,33 @@
+# Netlify configuration file
+
+# Build settings (if needed in future)
+[build]
+  publish = "."
+  command = ""
+
+# Cache static assets for 1 year
+[[headers]]
+  for = "/gallery/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/logos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/videos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Redirect rules (optional - add custom redirects here if needed)
+# [[redirects]]
+#   from = "/old-page"
+#   to = "/new-page"
+#   status = 301

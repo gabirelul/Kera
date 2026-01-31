@@ -24,15 +24,22 @@
     <nav class="navbar-custom">
         <div class="container-fluid">
             <div class="nav-wrapper">
+                <!-- Mobile Only Elements -->
+                <a href="index.html" class="logo-link mobile-logo">KERA</a>
+
                 <ul class="nav-menu">
                     <li>
-                        <a href="index.html" class="logo-link">KERA</a>
+                        <a href="index.html" class="logo-link desktop-logo">KERA</a>
                     </li>
-                    <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="gallery.html">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="index.html" class="active"><i class="hgi-stroke hgi-home-01"></i> Home</a></li>
+                    <li><a href="gallery.html"><i class="hgi-stroke hgi-image-02"></i> Projects</a></li>
+                    <li><a href="contact.html"><i class="hgi-stroke hgi-mail-01"></i> Contact</a></li>
                 </ul>
-                <!-- CTA Removed as requested -->
+
+                <button class="mobile-menu-toggle">
+                    <i class="hgi-stroke hgi-menu-01"></i>
+                </button>
+
 
             </div>
         </div>
@@ -52,35 +59,46 @@
                         i'm Alex.<br>
                         i film, i edit.
                     </h1>
-
-                    <div class="services-grid">
-                        <!-- Dynamic Content Rendered via script.js -->
-                    </div>
                 </div>
             </div>
+        </div>
+        <div class="services-grid">
+            <!-- Dynamic Content Rendered via script.js -->
         </div>
     </section>
 
     <!-- Trusted Brands Section -->
     <section class="brands-section">
         <div class="container-fluid">
-            <p class="brands-subtitle">Recent Brand Collaborations</p>
-            <div class="brands-carousel">
-                <div class="brand-item">
-                    <img src="logos/banu.png" alt="Banu Logo">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h3 class="brands-subtitle">Recent Brand Collaborations</h3>
                 </div>
-                <div class="brand-item">
-                    <img src="logos/fofy.png" alt="Fofy Logo">
+            </div>
+            <div class="brands-wrapper">
+                <button class="brand-nav-btn prev-btn" aria-label="Previous brands">
+                    <i class="hgi-stroke hgi-arrow-left-01"></i>
+                </button>
+                <div class="brands-carousel" id="brandsCarousel">
+                    <div class="brand-item">
+                        <img src="logos/banu.png" alt="Banu Logo">
+                    </div>
+                    <div class="brand-item">
+                        <img src="logos/fofy.png" alt="Fofy Logo">
+                    </div>
+                    <div class="brand-item">
+                        <img src="logos/never_enough.png" alt="Never Enough Logo">
+                    </div>
+                    <div class="brand-item">
+                        <img src="logos/privo.png" alt="Privo Logo">
+                    </div>
+                    <div class="brand-item">
+                        <img src="logos/rueffect.png" alt="Rueffect Logo">
+                    </div>
                 </div>
-                <div class="brand-item">
-                    <img src="logos/never_enough.png" alt="Never Enough Logo">
-                </div>
-                <div class="brand-item">
-                    <img src="logos/privo.png" alt="Privo Logo">
-                </div>
-                <div class="brand-item">
-                    <img src="logos/rueffect.png" alt="Rueffect Logo">
-                </div>
+                <button class="brand-nav-btn next-btn" aria-label="Next brands">
+                    <i class="hgi-stroke hgi-arrow-right-01"></i>
+                </button>
             </div>
         </div>
     </section>
@@ -98,119 +116,152 @@
             <!-- Unified Grid Row -->
             <div class="row g-4">
                 <!-- Text Card (Slot 1) -->
-                <div class="col-lg-4 col-md-12 d-flex align-items-center">
+                <div class="col-lg-4 col-md-12 d-flex flex-column justify-content-between">
                     <h2 class="section-title mb-0">Shoot <br> Edit <br> Repeat</h2>
-                </div>
-                <!-- Image Card 1: Urban Flow -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="gallery-card">
-                        <div class="gallery-image-container">
-                            <img src="gallery/car-2.jpg" alt="Urban Flow" class="gallery-image" loading="lazy">
-                        </div>
-                        <div class="gallery-content">
-                            <div class="gallery-header-row">
-                                <div class="gallery-text">
-                                    <h3 class="gallery-item-title">Urban Flow</h3>
-                                </div>
-                                <div class="gallery-arrow-btn">
-                                    <i class="hgi-stroke hgi-arrow-up-right-01"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Image Card 2: Neon Nights -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="gallery-card">
-                        <div class="gallery-image-container">
-                            <img src="gallery/car-3.jpg" alt="Neon Nights" class="gallery-image" loading="lazy">
-                        </div>
-                        <div class="gallery-content">
-                            <div class="gallery-header-row">
-                                <div class="gallery-text">
-                                    <h3 class="gallery-item-title">Neon Nights</h3>
-                                </div>
-                                <div class="gallery-arrow-btn">
-                                    <i class="hgi-stroke hgi-arrow-up-right-01"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Image Card 3: Porsche 911 -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="gallery-card">
-                        <div class="gallery-image-container">
-                            <img src="gallery/car-1.jpg" alt="Porsche 911" class="gallery-image" loading="lazy">
-                        </div>
-                        <div class="gallery-content">
-                            <div class="gallery-header-row">
-                                <div class="gallery-text">
-                                    <h3 class="gallery-item-title">Porsche 911</h3>
-                                </div>
-                                <div class="gallery-arrow-btn">
-                                    <i class="hgi-stroke hgi-arrow-up-right-01"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Image Card 4: Modern Living -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="gallery-card">
-                        <div class="gallery-image-container">
-                            <img src="gallery/car-4.jpg" alt="Modern Living" class="gallery-image" loading="lazy">
-                        </div>
-                        <div class="gallery-content">
-                            <div class="gallery-header-row">
-                                <div class="gallery-text">
-                                    <h3 class="gallery-item-title">Modern Living</h3>
-                                </div>
-                                <div class="gallery-arrow-btn">
-                                    <i class="hgi-stroke hgi-arrow-up-right-01"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Image Card 5: Glass House -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="gallery-card">
-                        <div class="gallery-image-container">
-                            <img src="gallery/car-3.jpg" alt="Glass House" class="gallery-image" loading="lazy">
-                        </div>
-                        <div class="gallery-content">
-                            <div class="gallery-header-row">
-                                <div class="gallery-text">
-                                    <h3 class="gallery-item-title">Glass House</h3>
-                                </div>
-                                <div class="gallery-arrow-btn">
-                                    <i class="hgi-stroke hgi-arrow-up-right-01"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Separator and Button -->
-            <div class="row mt-5">
-                <div class="col-12">
-                    <hr class="section-separator" style="border-color: rgba(255,255,255,0.1); margin-bottom: 3rem;">
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-start mt-4 mt-lg-0">
                         <a href="gallery.html" class="cta-btn">
                             See all projects
                             <i class="hgi-stroke hgi-arrow-right-01"></i>
                         </a>
                     </div>
                 </div>
+                <!-- Image Card 1: Urban Flow -->
+                <div class="col-lg-4 col-md-6 gallery-item">
+                    <a href="gallery.html" class="text-decoration-none">
+                        <div class="gallery-card">
+                            <div class="gallery-image-container">
+                                <img src="gallery/photos/cars/cars-001.jpg" alt="Urban Flow" class="gallery-image"
+                                    loading="lazy">
+                            </div>
+                            <div class="gallery-content">
+                                <div class="gallery-header-row">
+                                    <div class="gallery-text">
+                                        <h3 class="gallery-item-title">URBAN FLOW</h3>
+                                        <p class="text-white-50 small mb-0">Cars</p>
+                                    </div>
+                                    <div class="gallery-arrow-btn">
+                                        <i class="hgi-stroke hgi-arrow-right-01"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Image Card 2: Neon Nights -->
+                <div class="col-lg-4 col-md-6 gallery-item">
+                    <a href="gallery.html" class="text-decoration-none">
+                        <div class="gallery-card">
+                            <div class="gallery-image-container">
+                                <img src="gallery/photos/cars/cars-002.jpg" alt="Neon Nights" class="gallery-image"
+                                    loading="lazy">
+                            </div>
+                            <div class="gallery-content">
+                                <div class="gallery-header-row">
+                                    <div class="gallery-text">
+                                        <h3 class="gallery-item-title">NEON NIGHTS</h3>
+                                        <p class="text-white-50 small mb-0">Cars</p>
+                                    </div>
+                                    <div class="gallery-arrow-btn">
+                                        <i class="hgi-stroke hgi-arrow-right-01"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Image Card 3: Porsche 911 -->
+                <div class="col-lg-4 col-md-6 gallery-item">
+                    <a href="gallery.html" class="text-decoration-none">
+                        <div class="gallery-card">
+                            <div class="gallery-image-container">
+                                <img src="gallery/photos/cars/cars-003.jpg" alt="Porsche 911" class="gallery-image"
+                                    loading="lazy">
+                            </div>
+                            <div class="gallery-content">
+                                <div class="gallery-header-row">
+                                    <div class="gallery-text">
+                                        <h3 class="gallery-item-title">PORSCHE 911</h3>
+                                        <p class="text-white-50 small mb-0">Cars</p>
+                                    </div>
+                                    <div class="gallery-arrow-btn">
+                                        <i class="hgi-stroke hgi-arrow-right-01"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Image Card 4: Modern Living -->
+                <div class="col-lg-4 col-md-6 gallery-item">
+                    <a href="gallery.html" class="text-decoration-none">
+                        <div class="gallery-card">
+                            <div class="gallery-image-container">
+                                <img src="gallery/photos/realestate/realestate-001.jpg" alt="Modern Living"
+                                    class="gallery-image" loading="lazy">
+                            </div>
+                            <div class="gallery-content">
+                                <div class="gallery-header-row">
+                                    <div class="gallery-text">
+                                        <h3 class="gallery-item-title">MODERN LIVING</h3>
+                                        <p class="text-white-50 small mb-0">Real Estate</p>
+                                    </div>
+                                    <div class="gallery-arrow-btn">
+                                        <i class="hgi-stroke hgi-arrow-right-01"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Image Card 5: Glass House -->
+                <div class="col-lg-4 col-md-6 gallery-item">
+                    <a href="gallery.html" class="text-decoration-none">
+                        <div class="gallery-card">
+                            <div class="gallery-image-container">
+                                <img src="gallery/photos/realestate/realestate-001.jpg" alt="Glass House"
+                                    class="gallery-image" loading="lazy">
+                            </div>
+                            <div class="gallery-content">
+                                <div class="gallery-header-row">
+                                    <div class="gallery-text">
+                                        <h3 class="gallery-item-title">GLASS HOUSE</h3>
+                                        <p class="text-white-50 small mb-0">Real Estate</p>
+                                    </div>
+                                    <div class="gallery-arrow-btn">
+                                        <i class="hgi-stroke hgi-arrow-right-01"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Separator and Button -->
+            <div class="row mt-5 d-none">
+                <!-- Button moved to top grid -->
             </div>
 
 
+        </div>
+    </section>
+
+    <!-- Featured Reels Section -->
+    <section id="featured-reels-section" class="all-reels-section">
+        <div class="container-fluid">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h3 class="section-label">Featured Reels</h3>
+                </div>
+            </div>
+
+            <div id="featured-reels" class="reels-grid">
+                <!-- Reels injected via script.js -->
+            </div>
         </div>
     </section>
 

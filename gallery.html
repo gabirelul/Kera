@@ -24,14 +24,23 @@
     <nav class="navbar-custom">
         <div class="container-fluid">
             <div class="nav-wrapper">
+                <!-- Mobile Only Elements -->
+                <a href="index.html" class="logo-link mobile-logo">KERA</a>
+
                 <ul class="nav-menu">
                     <li>
-                        <a href="index.html" class="logo-link">KERA</a>
+                        <a href="index.html" class="logo-link desktop-logo">KERA</a>
                     </li>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="gallery.html" class="active">Projects</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="index.html"><i class="hgi-stroke hgi-home-01"></i> Home</a></li>
+                    <li><a href="gallery.html" class="active"><i class="hgi-stroke hgi-image-02"></i> Projects</a></li>
+                    <li><a href="contact.html"><i class="hgi-stroke hgi-mail-01"></i> Contact</a></li>
                 </ul>
+
+                <button class="mobile-menu-toggle">
+                    <i class="hgi-stroke hgi-menu-01"></i>
+                </button>
+
+
                 <!-- CTA Removed as requested -->
 
             </div>
@@ -55,27 +64,16 @@
     <div id="filter-sentinel"></div>
     <section class="filter-section">
         <div class="container-fluid position-relative">
-            <!-- Sticky specific Home Button -->
-            <a href="index.html" class="sticky-home-btn">
-                <i class="hgi-stroke hgi-arrow-left-01"></i> Home
-            </a>
+            <!-- Button Moved Below -->
 
             <div class="filter-tabs">
                 <!-- Dynamic Content Rendered via script.js -->
             </div>
-        </div>
-    </section>
 
-
-    <!-- All Reels Section (Grid) -->
-    <section id="all-reels-section" class="all-reels-section">
-        <div class="container-fluid">
-            <div class="section-label">Short-Form Content</div>
-            <h2 class="section-title">All Reels</h2>
-
-            <div id="all-reels" class="reels-grid">
-                <!-- Reels injected via script.js -->
-            </div>
+            <!-- Sticky specific Home Button -->
+            <a href="index.html" class="sticky-home-btn">
+                <i class="hgi-stroke hgi-arrow-left-01"></i> Home
+            </a>
         </div>
     </section>
 
